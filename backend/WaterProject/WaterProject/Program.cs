@@ -25,6 +25,14 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddCors(options => 
+    options.AddPolicy("AllowReactAppBlah", 
+    policy => {
+        policy.WithOrigins("http://localhost:3000")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    }));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,8 +43,9 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("AllowFrontend");
 
-app.UseHttpsRedirection();
 
+app.UseHttpsRedirection();
+app.UseCors("AllowReactAppBlah");
 app.UseAuthorization();
 
 app.MapControllers();
